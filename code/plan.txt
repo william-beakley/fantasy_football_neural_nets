@@ -1,0 +1,49 @@
+currently: 
+
+read csvs of each week for each player, process the data
+drafts players according to adp 
+
+draft according to hindsight, learn best draft with hindsight
+
+train season projections, then use hindsight drafting network to rank based on projections
+
+hindsight drafting:
+
+each team picks based on what generates the most wins
+
+idea: want to get highest average score per week
+
+with each batch, calculate each week's average score, relative score is the difference 
+between team's score and the average score
+
+if we have a week that is abysmal, we want to learn not to care about that week
+
+in drafting a player, we want to look at how many more points that player gets use
+
+the first player can be seen as a strategy-definer, or an independent variable
+
+for example, if we first pick the RB1, we want to then pick a RB/WR that has
+good weeks when the RB1 failed
+
+each team's path to victory is different dependent on who is available. 
+
+as random schedules played out -> infinity, optimal teams for each pick emerge
+
+we want to aim to find those optimal teams
+
+if we have weights for every player for every team for every pick, then if one team alters their decision,
+it will create negative results for our team
+
+we can save our previous max scoring team as a matrix of picks versus players
+
+theoretically, some dude who scores 0 points every game except one, where he scores 40 is super valuable
+
+in our model, we can predict this breakout performance, and play the guy on that week
+
+the only data we care about is the points scored for each week. 
+
+matrix of scores, with rows of players and columns of weeks, manifests as a bunch of numbers in a matrix
+
+objective function is the number of wins for a bunch of seasons.
+
+train each team in parallel

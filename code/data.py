@@ -63,6 +63,51 @@ def read_csv_player_all_weeks(name, year):
             
     return player_data
 
+def scores_for_year(name, year):
+    player_data = np.zeros([17])
+    for week in range(1,18):
+        with open("data/weekly/" + year + "/week" + str(week) + ".csv", newline='') as csvfile:
+            spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            for row in spamreader:
+                if((row[0]).lower() in name.lower() or name.lower() in (row[0]).lower()):
+                    player_data[week - 1] = row[16]
+                    break
+    return player_data
+
+def all_players_scores_week(year, week, player_map):
+    keys = player_map.keys()
+    num_keys = len(keys)
+    with open("data/weekly/" + year + "/week" + week + ".csv", newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        scores = np.zeros([num_keys + 1])
+        for row in spamreader:
+            name = (row[0]).lower()
+            if name in keys:
+                scores[player_map[name]] = row[16]
+        return scores
+
+                
+
+def all_players_scores_year(year):
+    player_map = {}
+    with open("data/yearly/" + str(year) + ".csv", newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        i = -1
+        for row in spamreader:
+            if i == -1:
+                i += 1
+            elif row[3] != "0":
+                player_map[(row[1]).lower()] = i
+                i += 1
+    scores = []
+    for week in range(1,18):
+        scores.append(all_players_scores_week(str(year), str(week), player_map))
+    npscores = np.array(scores)
+    trans = np.transpose(npscores)
+
+    return trans
+
+
 # def print_week(row):
 #     for i in range(len(row)):
 #         print(COLUMN_NAMES[i] + ": " + row[i])
@@ -104,9 +149,10 @@ def player_position(name, year):
 
     
             
-
 # my_input = input("week or year: \n")
 # if my_input == "week":
 #     player_week()
 # elif my_input == "year":
 #     player_all_weeks()
+scores = all_players_scores_year(2019)
+print(scores.shape)

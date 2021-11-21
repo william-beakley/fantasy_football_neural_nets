@@ -106,20 +106,29 @@ def random_schedule(teams, season_length):
     #         else:
     #             print("yeet")
 def play_season(totals, schedule):
+    teams = 8
     tuples = 4
-    results = np.zeros[]
+    schedule_len = len(schedule)
+    results = np.zeros([teams, schedule_len])
     for i in range(len(schedule)):
         week = np.reshape(schedule[i], (tuples, 2))
+        winner_count =0 
         for t1, t2 in week:
-            tie = False
-            winner = 0
+
             if totals[t1][i] > totals[t2][i]:
-                winner = t1
+                results[t1][i] = 1
+                results[t2][i] = 0
+                winner_count +=1 
             elif totals[t1][i] < totals[t2][i]:
-                winner = t2
+                results[t1][i] = 0
+                results[t2][i] = 1
+                winner_count +=1 
             else: 
-                tie = True
-            if not tie:
+                results[t1][i] = 0.5
+                results[t2][i] = 0.5
+    return results
+
+
 
 
 
@@ -184,10 +193,13 @@ def main():
     # print(head_to_head(totals_3, totals_4))
     # print(head_to_head(totals_5, totals_6))
     # print(head_to_head(totals_7, totals_8))
-    schedule = random_schedule(8, 16)
-    play_season([totals_1, totals_2, totals_3, totals_4, totals_5, totals_6, totals_7, totals_8], schedule)
-    # random_schedule([totals_1, totals_2, totals_3, totals_4, totals_5, totals_6, totals_7, totals_8], 16)
-
+    wins = np.zeros([8])
+    for i in range(100):
+        schedule = random_schedule(8, 16)
+        results = play_season([totals_1, totals_2, totals_3, totals_4, totals_5, totals_6, totals_7, totals_8], schedule)
+        vec = np.sum(results, axis=1)
+        wins += vec
+    print(wins/100)
 
 
 

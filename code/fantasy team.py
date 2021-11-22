@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from matplotlib import pyplot as plt
 import tensorflow as tf
 import numpy as np
-import data
+import read_data
 import drafter
 import random
 import math
@@ -22,8 +22,8 @@ class Team():
         self.players_data = {}
         for player in players:
             self.players_list.append(player)
-            self.players_map[data.player_position(player, year)].append(player)
-            self.players_data[player] = data.read_csv_player_all_weeks(player, year)
+            self.players_map[read_data.player_position(player, year)].append(player)
+            self.players_data[player] = read_data.read_csv_player_all_weeks(player, year)
         
 
     def call(self):
@@ -38,13 +38,13 @@ class Team():
             for player in self.players_list:
                 player_data = self.players_data[player]
                 if player in self.players_map["QB"]:
-                    qb_scores.append(round(float(player_data[week][data.COLUMN_NAMES_MAP["PPRFantasyPoints"]]), 2))
+                    qb_scores.append(round(float(player_data[week][read_data.COLUMN_NAMES_MAP["PPRFantasyPoints"]]), 2))
                 elif player in self.players_map["RB"]:
-                    rb_scores.append(round(float(player_data[week][data.COLUMN_NAMES_MAP["PPRFantasyPoints"]]), 2))
+                    rb_scores.append(round(float(player_data[week][read_data.COLUMN_NAMES_MAP["PPRFantasyPoints"]]), 2))
                 elif player in self.players_map["WR"]:
-                    wr_scores.append(round(float(player_data[week][data.COLUMN_NAMES_MAP["PPRFantasyPoints"]]), 2))
+                    wr_scores.append(round(float(player_data[week][read_data.COLUMN_NAMES_MAP["PPRFantasyPoints"]]), 2))
                 elif player in self.players_map["TE"]:
-                    te_scores.append(round(float(player_data[week][data.COLUMN_NAMES_MAP["PPRFantasyPoints"]]), 2))
+                    te_scores.append(round(float(player_data[week][read_data.COLUMN_NAMES_MAP["PPRFantasyPoints"]]), 2))
             wr_scores.sort(reverse=True)
             rb_scores.sort(reverse=True)
             flex_scores = wr_scores[2:] + rb_scores[2:]

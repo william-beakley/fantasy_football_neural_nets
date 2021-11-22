@@ -42,6 +42,13 @@ def read_csv_player_week(name, year, week):
             if(name.lower() == (row[0]).lower()):
                 print_week(row)
 
+def read_test():
+    with open("data/weekly/2019/week1.csv") as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        for row in spamreader:
+            if("tyreek hill".lower() == (row[0]).lower()):
+                print_week(row)
+
 def read_csv_player_all_weeks(name, year):
     player_data = {}
     played = []
@@ -62,6 +69,24 @@ def read_csv_player_all_weeks(name, year):
             
             
     return player_data
+
+def read_csv_player_all_weeks_flask(name, year):
+    player_data = {}
+    played = []
+    for week in range(1,18):
+        with open("data/weekly/" + year + "/week" + str(week) + ".csv", newline='') as csvfile:
+            spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            found = False
+            for row in spamreader:
+                if((row[0]).lower() in name.lower() or name.lower() in (row[0]).lower()):
+                    player_data[week] = row
+                    found = True
+                    played.append(week)
+                    break
+            if (not found):
+                player_data[week] = list(np.zeros(19))
+    return player_data
+
 
 def scores_for_year(name, year):
     player_data = np.zeros([17])
@@ -140,6 +165,8 @@ def player_all_weeks():
             category = input("which category: \n")
             average_across_weeks(player_data, category)
 
+
+
 def player_position(name, year):
     with open("data/yearly/" + year + ".csv", newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -154,5 +181,5 @@ def player_position(name, year):
 #     player_week()
 # elif my_input == "year":
 #     player_all_weeks()
-scores = all_players_scores_year(2019)
-print(scores.shape)
+# scores = all_players_scores_year(2019)
+# print(scores.shape)
